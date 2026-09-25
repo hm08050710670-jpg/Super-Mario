@@ -12,44 +12,46 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"DotGothic16",ui
 canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;max-width:100%;border-radius:6px;box-shadow:0 0 0 3px var(--edge),0 0 0 6px var(--pad),0 18px 40px rgba(0,0,0,.5);outline:none}
 #help{font-size:13px;letter-spacing:.04em;opacity:.75;padding-block:8px 14px;text-align:center;line-height:1.7}
 #help b{color:var(--acc);font-weight:400}
-#touch{display:none;flex:0 0 auto;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:640px;padding-inline:8px;padding-block:4px calc(16px + env(safe-area-inset-bottom,0px));box-sizing:border-box;
-  --dpw:clamp(118px,42vw,200px);--dph:clamp(132px,48vw,226px);--abw:clamp(52px,19vw,90px);
+#touch{display:none;flex:0 0 auto;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:max(640px,calc(var(--u)*1.02));padding-inline:8px;padding-block:4px calc(16px + env(safe-area-inset-bottom,0px));box-sizing:border-box;
+  --u:min(var(--ui,100vw),100vw);
+  --bw:max(4px,calc(var(--u)*.0095));--iw:max(6px,calc(var(--u)*.0142));
+  --dpw:max(118px,calc(var(--u)*.43));--dph:max(132px,calc(var(--u)*.49));--abw:max(52px,calc(var(--u)*.195));
   --rimB:linear-gradient(180deg,#a8e2ff 0%,#3a9bf5 20%,#0f3fb0 58%,#2f86e8 82%,#6fc6ff 100%)}
 #touch .main{display:flex;width:100%;justify-content:space-between;align-items:flex-start}
 /* D-pad: two tall purple keys in a black bezel with a blue chrome rim */
 #touch .dir{display:flex;gap:4px;align-items:stretch;box-sizing:border-box;
-  width:var(--dpw);height:var(--dph);border:4px solid transparent;border-radius:26px;padding:6px;
+  width:var(--dpw);height:var(--dph);border:var(--bw) solid transparent;border-radius:max(26px,calc(var(--u)*.062));padding:max(6px,calc(var(--u)*.014));
   background:linear-gradient(#0d0c13,#0d0c13) padding-box,var(--rimB) border-box;
   box-shadow:0 6px 0 #06050b,0 14px 26px rgba(0,0,0,.6)}
 #touch .dir button{flex:1;height:100%;border:0;padding:0;color:#f7edd2;
-  font-size:clamp(24px,7.4vw,40px);line-height:1;text-shadow:3px 3px 0 rgba(0,0,0,.4);
+  font-size:max(24px,calc(var(--u)*.076));line-height:1;text-shadow:3px 3px 0 rgba(0,0,0,.4);
   background:linear-gradient(180deg,rgba(255,255,255,.4),rgba(255,255,255,.06) 20%,rgba(255,255,255,0) 40%),
              linear-gradient(175deg,#9a6ae0 0%,#7c48c2 34%,#5c2d99 72%,#47207d 100%)}
-#touch .dir button:first-child{border-radius:20px 7px 7px 20px}
-#touch .dir button:last-child{border-radius:7px 20px 20px 7px}
+#touch .dir button:first-child{border-radius:max(20px,calc(var(--u)*.047)) max(7px,calc(var(--u)*.017)) max(7px,calc(var(--u)*.017)) max(20px,calc(var(--u)*.047))}
+#touch .dir button:last-child{border-radius:max(7px,calc(var(--u)*.017)) max(20px,calc(var(--u)*.047)) max(20px,calc(var(--u)*.047)) max(7px,calc(var(--u)*.017))}
 #touch .dir button.on{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 34%),
   linear-gradient(175deg,#6b3ca8 0%,#542b8c 40%,#3a1a66 100%);box-shadow:inset 0 4px 10px rgba(0,0,0,.5)}
 /* A / B: tall capsules, same rim and bezel */
-#touch .ab{display:flex;align-items:flex-start;gap:clamp(8px,3vw,18px)}
+#touch .ab{display:flex;align-items:flex-start;gap:max(8px,calc(var(--u)*.031))}
 #touch button.a,#touch button.b{box-sizing:border-box;width:var(--abw);height:var(--dph);
-  border:4px solid transparent;border-radius:999px;padding:0;
-  color:#f7edd2;font-family:"Press Start 2P",ui-monospace,monospace;font-size:clamp(15px,4.6vw,24px);
+  border:var(--bw) solid transparent;border-radius:999px;padding:0;
+  color:#f7edd2;font-family:"Press Start 2P",ui-monospace,monospace;font-size:max(15px,calc(var(--u)*.047));
   line-height:1;text-shadow:3px 3px 0 rgba(0,0,0,.4);
-  box-shadow:inset 0 0 0 6px #0d0c13,0 6px 0 #06050b,0 14px 26px rgba(0,0,0,.6)}
+  box-shadow:inset 0 0 0 var(--iw) #0d0c13,0 6px 0 #06050b,0 14px 26px rgba(0,0,0,.6)}
 #touch button.b{background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.08) 22%,rgba(255,255,255,0) 42%) padding-box,
   linear-gradient(180deg,#5cc2ff 0%,#2a86ec 34%,#1356c8 74%,#0b3d9e 100%) padding-box,var(--rimB) border-box}
 #touch button.a{margin-top:7px;background:linear-gradient(180deg,rgba(255,255,255,.44),rgba(255,255,255,.07) 22%,rgba(255,255,255,0) 42%) padding-box,
   linear-gradient(180deg,#ff6f62 0%,#ec3328 34%,#c81d16 74%,#9a110c 100%) padding-box,var(--rimB) border-box}
 #touch button.a.on,#touch button.b.on{transform:translateY(3px);
-  box-shadow:inset 0 0 0 6px #0d0c13,inset 0 6px 12px rgba(0,0,0,.45),0 2px 0 #06050b,0 6px 14px rgba(0,0,0,.5)}
+  box-shadow:inset 0 0 0 var(--iw) #0d0c13,inset 0 6px 12px rgba(0,0,0,.45),0 2px 0 #06050b,0 6px 14px rgba(0,0,0,.5)}
 #touch button.b.on{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 34%) padding-box,
   linear-gradient(180deg,#2b7ac4 0%,#1a5aa6 40%,#0a3574 100%) padding-box,var(--rimB) border-box}
 #touch button.a.on{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 34%) padding-box,
   linear-gradient(180deg,#c8352a 0%,#a51f18 40%,#6d0c09 100%) padding-box,var(--rimB) border-box}
 /* small centre pills */
 #touch .mid{display:flex;gap:10px;align-items:center;margin-top:2px}
-#touch .mid button{font-family:inherit;width:clamp(46px,13vw,64px);height:clamp(28px,7.5vw,36px);border-radius:999px;
-  border:2px solid transparent;padding:0;color:#d8d2e6;font-size:clamp(11px,3vw,14px);
+#touch .mid button{font-family:inherit;width:max(46px,calc(var(--u)*.133));height:max(28px,calc(var(--u)*.077));border-radius:999px;
+  border:2px solid transparent;padding:0;color:#d8d2e6;font-size:max(11px,calc(var(--u)*.031));
   background:linear-gradient(#232032,#232032) padding-box,var(--rimB) border-box;
   box-shadow:0 3px 0 #06050b}
 #touch .mid button.on{color:#fff;background:linear-gradient(#3b3258,#3b3258) padding-box,var(--rimB) border-box;transform:translateY(2px);box-shadow:0 1px 0 #06050b}
@@ -79,7 +81,9 @@ function resize(){
   let s=Math.min(wr.width/W,(wr.height-8)/H);
   if(s>=2) s=Math.floor(s*4)/4;
   s=Math.max(s,0.5);
-  cv.style.width=Math.floor(W*s)+'px';cv.style.height=Math.floor(H*s)+'px';
+  const px=Math.floor(W*s);
+  cv.style.width=px+'px';cv.style.height=Math.floor(H*s)+'px';
+  document.documentElement.style.setProperty('--ui',px+'px');
 }
 window.addEventListener('resize',resize);resize();
 const FONT='"DotGothic16",ui-monospace,monospace';
