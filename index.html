@@ -620,7 +620,10 @@ const KEYMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',Arrow
 const held={},touchHeld={};let prevIn={},pendingStart=false;
 window.addEventListener('keydown',e=>{const k=KEYMAP[e.code];if(k){held[k]=true;e.preventDefault();audioInit();}});
 window.addEventListener('keyup',e=>{const k=KEYMAP[e.code];if(k){held[k]=false;e.preventDefault();}});
-cv.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();cv.focus();if(e.pointerType!=='mouse'||G.state!=='play')pendingStart=true;});
+// Tapping the game screen advances the title / card / game-over / ending screens.
+// It deliberately does NOT count as START while playing: a thumb brushing the
+// screen would otherwise pause the game out of nowhere. Use the START button.
+cv.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();cv.focus();if(G.state!=='play')pendingStart=true;});
 const touchEl=document.getElementById('touch');const activeTouch=new Map();
 function refreshTouch(){for(const k in touchHeld)touchHeld[k]=false;for(const k of activeTouch.values())touchHeld[k]=true;
   touchEl.querySelectorAll('button').forEach(b=>b.classList.toggle('on',!!touchHeld[b.dataset.k]));}
@@ -642,7 +645,10 @@ touchEl.addEventListener('contextmenu',e=>e.preventDefault());
 // Every key we think is held must have a finger still on the glass to hold it.
 ['touchend','touchcancel'].forEach(ev=>window.addEventListener(ev,e=>{
   if(activeTouch.size>(e.touches?e.touches.length:0))clearTouch();},{passive:true,capture:true}));
-window.addEventListener('blur',()=>{releaseAll();if(G.state==='play'&&!G.paused)setPause(true);});
+// Leaving the page pauses. On a phone 'blur' fires for all sorts of harmless
+// reasons (banners, the toolbar, an audio interruption), so there we trust only
+// visibilitychange, which fires when the page is really put away.
+window.addEventListener('blur',()=>{releaseAll();if(!TOUCHDEV&&G.state==='play'&&!G.paused)setPause(true);});
 window.addEventListener('focus',releaseAll);
 window.addEventListener('pagehide',releaseAll);
 document.addEventListener('visibilitychange',()=>{releaseAll();if(document.hidden&&G.state==='play'&&!G.paused)setPause(true);});
