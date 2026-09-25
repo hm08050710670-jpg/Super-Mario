@@ -620,18 +620,32 @@ const KEYMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',Arrow
 const held={},touchHeld={};let prevIn={},pendingStart=false;
 window.addEventListener('keydown',e=>{const k=KEYMAP[e.code];if(k){held[k]=true;e.preventDefault();audioInit();}});
 window.addEventListener('keyup',e=>{const k=KEYMAP[e.code];if(k){held[k]=false;e.preventDefault();}});
-window.addEventListener('blur',()=>{for(const k in held)held[k]=false;if(G.state==='play'&&!G.paused)setPause(true);});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&G.state==='play'&&!G.paused)setPause(true);});
 cv.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();cv.focus();if(e.pointerType!=='mouse'||G.state!=='play')pendingStart=true;});
 const touchEl=document.getElementById('touch');const activeTouch=new Map();
 function refreshTouch(){for(const k in touchHeld)touchHeld[k]=false;for(const k of activeTouch.values())touchHeld[k]=true;
   touchEl.querySelectorAll('button').forEach(b=>b.classList.toggle('on',!!touchHeld[b.dataset.k]));}
+function clearTouch(){if(activeTouch.size){activeTouch.clear();refreshTouch();}}
+function releaseAll(){for(const k in held)held[k]=false;clearTouch();}
 function touchAt(e){const el=document.elementFromPoint(e.clientX,e.clientY);const b=el&&el.closest?el.closest('button[data-k]'):null;return b?b.dataset.k:null;}
 touchEl.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();const k=touchAt(e);if(k){activeTouch.set(e.pointerId,k);refreshTouch();}});
 touchEl.addEventListener('pointermove',e=>{if(!activeTouch.has(e.pointerId))return;const k=touchAt(e);const old=activeTouch.get(e.pointerId);
   if(k&&k!==old&&(k==='left'||k==='right'||k==='jump'||k==='run')){activeTouch.set(e.pointerId,k);refreshTouch();}});
-['pointerup','pointercancel','pointerleave'].forEach(ev=>touchEl.addEventListener(ev,e=>{if(activeTouch.delete(e.pointerId))refreshTouch();}));
+touchEl.addEventListener('pointerleave',e=>{if(activeTouch.delete(e.pointerId))refreshTouch();});
 touchEl.addEventListener('contextmenu',e=>e.preventDefault());
+// Releases are caught on window, in the capture phase: if the finger is lifted
+// outside the pad, or the button is re-rendered mid-press, the pointerup never
+// reaches #touch and the key would stay stuck down.
+['pointerup','pointercancel'].forEach(ev=>window.addEventListener(ev,e=>{if(activeTouch.delete(e.pointerId))refreshTouch();},true));
+// Last resort: the OS can swallow the release entirely (notification banner,
+// control centre, app switch, screenshot). Whenever no finger is left on the
+// glass, nothing can be held, so drop everything.
+// Every key we think is held must have a finger still on the glass to hold it.
+['touchend','touchcancel'].forEach(ev=>window.addEventListener(ev,e=>{
+  if(activeTouch.size>(e.touches?e.touches.length:0))clearTouch();},{passive:true,capture:true}));
+window.addEventListener('blur',()=>{releaseAll();if(G.state==='play'&&!G.paused)setPause(true);});
+window.addEventListener('focus',releaseAll);
+window.addEventListener('pagehide',releaseAll);
+document.addEventListener('visibilitychange',()=>{releaseAll();if(document.hidden&&G.state==='play'&&!G.paused)setPause(true);});
 const KEYS=['left','right','down','jump','run','start','mute'];
 function readInput(){
   const cur={};for(const k of KEYS)cur[k]=!!(held[k]||touchHeld[k]);
