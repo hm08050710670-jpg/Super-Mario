@@ -7,6 +7,9 @@
 <style>
 :root{--bg:#120f1f;--ink:#f3ecd8;--acc:#ffd23f;--pad:#2a2340;--pad2:#3b3258;--edge:#05040a}
 html,body{height:100%}
+/* touch-action is not inherited, so it has to be set on everything: with it only
+   on <body>, a double tap on the canvas or the pad's frame zoomed the page in. */
+html,body,#wrap,#help,canvas,#touch,#touch *{touch-action:none}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"DotGothic16",ui-monospace,"Hiragino Kaku Gothic ProN",monospace;display:flex;flex-direction:column;align-items:center;padding-inline:16px;box-sizing:border-box;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 #wrap{flex:1;display:flex;align-items:center;justify-content:center;width:100%;min-height:0;padding-block:12px 4px;box-sizing:border-box}
 canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;max-width:100%;border-radius:6px;box-shadow:0 0 0 3px var(--edge),0 0 0 6px var(--pad),0 18px 40px rgba(0,0,0,.5);outline:none}
@@ -89,6 +92,11 @@ function resize(){
   document.documentElement.style.setProperty('--ui',px+'px');
 }
 window.addEventListener('resize',resize);resize();
+// belt and braces for iOS: kill the pinch gesture and the double-tap-to-zoom
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
+document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
+let lastTapT=0;
+document.addEventListener('touchend',e=>{const t=e.timeStamp;if(t-lastTapT<400)e.preventDefault();lastTapT=t;},{passive:false});
 const FONT='"DotGothic16",ui-monospace,monospace';
 
 // ================= PALETTE & SPRITES =================
