@@ -441,8 +441,19 @@ const HEART_ROWS=[
   "....RRRrr....",
   ".....RRr.....",
   "............."];
+// a small heart for the coin counter's "50 -> +1" hint
+const HEART_MINI=outline(mk([
+  ".........",
+  "..RR.RR..",
+  ".RWRRRRr.",
+  ".RRRRRRr.",
+  ".RRRRRRr.",
+  "..RRRRr..",
+  "...RRr...",
+  "....r....",
+  "........."],{R:'#e8463a',r:'#a8231c',W:'#ff9a8a'}),'#0a0b2e');
 const HEART_ON=outline(mk(HEART_ROWS,{R:'#e8463a',r:'#a8231c',W:'#ff9a8a'}),'#0a0b2e');
-const HEART_OFF=outline(mk(HEART_ROWS,{R:'#3d3750',r:'#2a2439',W:'#4e4766'}),'#0a0b2e');
+const HEART_OFF=outline(mk(HEART_ROWS,{R:'#726d80',r:'#514c5e',W:'#918ba1'}),'#0a0b2e');
 // the coin beside the COIN counter, sized to sit on the value row
 const HCOIN=outline(mk([
   "..YYYYY..",
@@ -981,7 +992,7 @@ function buildTiles(th){
   return {gt:ground(true),g:ground(false),brick,q,used,hard,pTL,pTR,pL,pR,plat};
 }
 const TILES={};for(const k in THEMES)TILES[k]=buildTiles(THEMES[k]);
-const SOLIDS=new Set(['#','B','?','M','U','X','[',']','{','}']);
+const SOLIDS=new Set(['#','B','?','M','F','U','X','[',']','{','}']);
 
 // ================= LEVELS =================
 function builder(w,theme,opts,fn){
@@ -1055,33 +1066,8 @@ const LEVELS=[
     b.gnd(149,160,9);b.e('u',154,8);b.row(152,5,'cccc');b.row(150,5,'?');
     b.gnd(163,175,11);b.e('d',168,10);b.e('d',170,10);b.row(166,7,'M');b.e('k',174,5);
     b.gnd(176,231,13);b.stairs(178,2);b.stairsDown(181,2);
+    b.row(186,9,'F');   // the last block before the arena always holds a chili
     b.row(193,9,'===');b.row(203,9,'===');b.fill(209,209,0,12,'X');b.fill(210,231,0,12,'X');
-  }),
-  ()=>builder(210,'ebisuN',{name:'恵比寿の夜',check:100,house:200},b=>{
-    b.gnd(0,45);b.gnd(49,80);b.gnd(84,120);b.gnd(124,150);b.gnd(154,209);
-    b.row(10,9,'?B?B?');b.row(12,5,'M');b.e('d',20);b.e('d',22);b.e('k',30,6);
-    b.pipe(36,3);b.pipe(42,2);b.row(38,6,'ccc');
-    b.row(50,9,'BBBB');b.row(50,5,'BBBB');b.row(51,4,'cc');b.e('d',52,8);b.e('u',60);
-    b.row(66,8,'====');b.row(66,7,'cccc');b.row(70,5,'?M?');b.e('d',72);b.e('d',74);b.e('k',78,5);
-    b.stairs(85,3);b.row(92,9,'B?B');b.e('u',96);b.e('d',100);b.e('d',102);b.e('k',106,6);
-    b.pipe(110,4);b.pipe(116,3);b.e('d',113);b.row(121,9,'===');b.row(121,8,'ccc');
-    b.row(128,9,'BBMBB');b.e('d',132);b.e('d',134);b.e('u',140);b.e('k',144,4);
-    b.mp(151.5,10,'x',20,0.03);
-    b.stairs(160,4);b.stairsDown(166,4);b.e('d',172);b.e('d',174);b.pipe(178,2);
-    b.stairs(182,6);b.fill(188,188,7,12,'X');b.pole(196);
-  }),
-  ()=>builder(220,'factory',{name:'昼の熊谷の工場',check:116,house:208,houseLabel:'じむしょ'},b=>{
-    b.gnd(0,30);b.fill(8,10,11,12,'X');b.row(14,9,'?M?');b.e('d',18);b.e('d',20);b.pipe(24,3);
-    b.mp(33,10,'x',24,0.03);
-    b.gnd(36,70);b.row(38,8,'XXXX');b.row(38,7,'cccc');b.e('u',44);b.pipe(48,2);b.pipe(52,4);b.pipe(56,3);b.e('d',50);b.e('d',54);
-    b.row(60,6,'=====');b.row(60,5,'ccccc');b.e('k',64,4);b.fill(66,67,9,12,'X');
-    b.mp(72,10,'y',30,0.03);b.mp(75,8,'y',30,0.03,Math.PI);
-    b.gnd(77,110);b.row(80,9,'B?B?B');b.row(82,5,'M');b.e('d',84);b.e('d',86);b.e('u',92);b.stairs(96,3);b.stairsDown(99,3);b.e('d',104);b.e('k',107,5);
-    b.row(111,10,'====');
-    b.gnd(115,150);b.pipe(118,3);b.pipe(122,5);b.row(120,6,'===');b.e('d',126);b.e('d',128);b.row(130,9,'XXBXX');b.row(132,5,'?');b.e('u',136);b.e('u',140);b.fill(144,146,10,12,'X');
-    b.mp(152,11,'x',30,0.025);
-    b.gnd(157,219);b.e('k',160,5);b.e('d',165);b.e('d',167);b.row(170,9,'B?B');b.pipe(176,2);b.e('d',180);
-    b.stairs(186,8);b.fill(194,194,5,12,'X');b.pole(204);
   }),
   ()=>builder(214,'golf',{name:'早朝の東京クラシック',check:104,house:204,houseLabel:'クラブハウス'},b=>{
     b.gnd(0,24);b.row(10,9,'?M?');b.e('d',16);b.e('k',22,6);
@@ -1098,6 +1084,19 @@ const LEVELS=[
     b.gnd(156,213);b.stairs(160,3);b.stairsDown(164,3);b.e('d',170);b.e('k',176,5);
     b.stairs(182,8);b.fill(190,190,5,12,'X');b.pole(200);
   }),
+  ()=>builder(220,'factory',{name:'昼の熊谷の工場',check:116,house:208,houseLabel:'じむしょ'},b=>{
+    b.gnd(0,30);b.fill(8,10,11,12,'X');b.row(14,9,'?M?');b.e('d',18);b.e('d',20);b.pipe(24,3);
+    b.mp(33,10,'x',24,0.03);
+    b.gnd(36,70);b.row(38,8,'XXXX');b.row(38,7,'cccc');b.e('u',44);b.pipe(48,2);b.pipe(52,4);b.pipe(56,3);b.e('d',50);b.e('d',54);
+    b.row(60,6,'=====');b.row(60,5,'ccccc');b.e('k',64,4);b.fill(66,67,9,12,'X');
+    b.mp(72,10,'y',30,0.03);b.mp(75,8,'y',30,0.03,Math.PI);
+    b.gnd(77,110);b.row(80,9,'B?B?B');b.row(82,5,'M');b.e('d',84);b.e('d',86);b.e('u',92);b.stairs(96,3);b.stairsDown(99,3);b.e('d',104);b.e('k',107,5);
+    b.row(111,10,'====');
+    b.gnd(115,150);b.pipe(118,3);b.pipe(122,5);b.row(120,6,'===');b.e('d',126);b.e('d',128);b.row(130,9,'XXBXX');b.row(132,5,'?');b.e('u',136);b.e('u',140);b.fill(144,146,10,12,'X');
+    b.mp(152,11,'x',30,0.025);
+    b.gnd(157,219);b.e('k',160,5);b.e('d',165);b.e('d',167);b.row(170,9,'B?B');b.pipe(176,2);b.e('d',180);
+    b.stairs(186,8);b.fill(194,194,5,12,'X');b.pole(204);
+  }),
   ()=>builder(232,'nishi',{name:'夜の西麻布',check:100,time:400,arena:190,boss:'karasu'},b=>{
     b.gnd(0,30);b.e('d',14);b.e('d',16);b.row(10,9,'?B?');b.row(11,5,'M');b.e('k',24,5);
     b.gnd(34,60,11);b.e('u',40,10);b.e('d',46,10);b.e('d',48,10);b.row(44,6,'B?B');b.pipe(54,2,11);
@@ -1109,6 +1108,7 @@ const LEVELS=[
     b.row(151,10,'====');
     b.gnd(155,175,11);b.e('d',160,10);b.e('d',162,10);b.e('k',168,5);b.row(164,7,'?M?');
     b.gnd(176,231);b.stairs(178,2);b.stairsDown(181,2);
+    b.row(186,9,'F');   // the last block before the arena always holds a chili
     b.row(193,9,'===');b.row(203,9,'===');b.fill(209,209,0,12,'X');b.fill(210,231,0,12,'X');
   }),
   ()=>builder(220,'ebisu',{name:'ウーバーチャンの逆襲',check:100,time:400,house:210},b=>{
@@ -1143,15 +1143,16 @@ const LEVELS=[
     b.row(162,10,'====');
     b.gnd(166,175,11);b.e('b',170,10);b.row(168,7,'?M?');
     b.gnd(176,231);b.stairs(178,2);b.stairsDown(181,2);
+    b.row(186,9,'F');   // the last block before the arena always holds a chili
     b.row(193,9,'===');b.row(203,9,'===');b.fill(209,209,0,12,'X');b.fill(210,231,0,12,'X');
-  }),
+  })
 ];
-const STAGES=[['1-1','朝の恵比寿'],['1-2','恵比寿の地下水路'],['1-3','アイルの屋根裏'],['2-1','恵比寿の夜'],['2-2','昼の熊谷の工場'],['2-3','早朝の東京クラシック'],['2-4','夜の西麻布'],['3-1','ウーバーチャンの逆襲'],['3-2','配達ラッシュの明治通り'],['3-3','ウーバーチャン最後の決戦']];
+const STAGES=[['1-1','朝の恵比寿'],['1-2','恵比寿の地下水路'],['1-3','アイルの屋根裏'],['2-1','早朝の東京クラシック'],['2-2','昼の熊谷の工場'],['2-3','夜の西麻布'],['3-1','ウーバーチャンの逆襲'],['3-2','配達ラッシュの明治通り'],['3-3','ウーバーチャン最後の決戦']];
 
 // ================= GAME STATE =================
 function loadHi(){try{return +(localStorage.getItem('nobuo-hi')||0)||0;}catch(e){return 0;}}
 // which world each stage belongs to, and that world's first stage
-const WORLD_OF=[1,1,1,2,2,2,2,3,3,3],WORLD_START=[0,0,0,3,3,3,3,7,7,7];
+const WORLD_OF=[1,1,1,2,2,2,3,3,3],WORLD_START=[0,0,0,3,3,3,6,6,6];
 function loadProg(){try{return +(localStorage.getItem('nobuo-prog')||0)||0;}catch(e){return 0;}}
 function saveProg(n){if(n>G.prog){G.prog=n;try{localStorage.setItem('nobuo-prog',String(n));}catch(e){}}}
 // stages the player may pick on the title: every world cleared so far (or all of them, via the secret)
@@ -1192,8 +1193,13 @@ function flameBurst(cx,cy){
     parts.push({k:'fl',x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-0.7,t:0,r:(Math.random()*2)|0});}
 }
 function addScore(n,x,y){G.score+=n;if(x!==undefined)popText(x,y,n);}
-function oneUp(x,y){G.lives=Math.min(99,G.lives+1);SFX.oneup();if(x!==undefined)popText(x,y,'1UP');}
-function addCoin(){G.coins++;G.score+=200;SFX.coin();if(G.coins>=100){G.coins-=100;oneUp(P.x,P.y-8);}}
+const MAXLIVES=3;
+function oneUp(x,y){G.lives=Math.min(MAXLIVES,G.lives+1);SFX.oneup();if(x!==undefined)popText(x,y,'1UP');}
+// 50 coins buy a heart back; at full health they turn into points instead
+function addCoin(){G.coins++;G.score+=200;SFX.coin();
+  if(G.coins>=50){G.coins-=50;
+    if(G.lives<MAXLIVES)oneUp(P.x,P.y-8);
+    else{SFX.oneup();addScore(1000,P.x,P.y-8);}}}
 
 function newPlayer(x){
   const h=G.form?28:15;
@@ -1236,6 +1242,10 @@ function bumpTile(tx,ty){
   }else if(t==='?'){lvl.g[ty][tx]='U';bumps.push({tx,ty,t:0});ents.push({type:'coinpop',x:tx*T,y:ty*T-16,w:16,h:16,vy:-5.5,t:0});addCoin();}
   else if(t==='M'){lvl.g[ty][tx]='U';bumps.push({tx,ty,t:0});SFX.item();
     const it=P.form===0?'oni':'chili';ents.push({type:it,x:tx*T+1,y:ty*T,w:14,h:15,vx:0,vy:0,dir:1,emerge:16,t:0});}
+  // 'F' always gives the chili, whatever form you are in: it guards the run-up to
+  // a boss, so dying at the arena never leaves you facing one without fire
+  else if(t==='F'){lvl.g[ty][tx]='U';bumps.push({tx,ty,t:0});SFX.item();
+    ents.push({type:'chili',x:tx*T+1,y:ty*T,w:14,h:15,vx:0,vy:0,dir:1,emerge:16,t:0});}
   else SFX.bump();
   // things sitting on top of the bumped tile
   for(const e of ents)if(KILLABLE.has(e.type)&&e.x+e.w>tx*T&&e.x<tx*T+T&&Math.abs(e.y+e.h-ty*T)<4)kill(e,e.x+e.w/2<tx*T+8?-1:1,100);
@@ -1667,7 +1677,7 @@ function drawTiles(cx){
     const t=lvl.g[y][x];if(t==='.')continue;let px=x*T-cx,py=y*T;
     for(const b of bumps)if(b.tx===x&&b.ty===y)py-=Math.round(Math.sin(b.t/10*Math.PI)*6);
     let img=null;
-    switch(t){case '#':img=(y===0||lvl.g[y-1][x]!=='#')?ts.gt:ts.g;break;case 'B':img=ts.brick;break;case '?':case 'M':img=qf;break;case 'U':img=ts.used;break;case 'X':img=ts.hard;break;
+    switch(t){case '#':img=(y===0||lvl.g[y-1][x]!=='#')?ts.gt:ts.g;break;case 'B':img=ts.brick;break;case '?':case 'M':case 'F':img=qf;break;case 'U':img=ts.used;break;case 'X':img=ts.hard;break;
       case '[':img=ts.pTL;break;case ']':img=ts.pTR;break;case '{':img=ts.pL;break;case '}':img=ts.pR;break;case '=':img=ts.plat;break;
       case 'c':ctx.drawImage(COIN,px+(16-cw)/2,py,cw,16);continue;}
     if(img)ctx.drawImage(img,px,py);
@@ -1784,8 +1794,6 @@ function drawWorld(cx,drift){
   for(const e of ents)if(!(e.emerge>0))drawEnt(e,cx);
   drawPlayer(cx);drawParts(cx);
 }
-// Remaining lives as hearts. Up to five slots are drawn; a 1UP run past that
-// collapses to one heart and a count so the row never overflows the name.
 // ================= HUD BITMAP FONT =================
 // The top row uses a hand-made pixel font rather than the page font: blocky,
 // evenly outlined, and crisp at the sizes the layout actually uses.
@@ -1827,7 +1835,10 @@ const GL10={
 "7":["######","######","....##","...##.","...##.","..##..","..##..",".##...",".##...",".##..."],
 "8":[".####.","######","##..##","##..##",".####.",".####.","##..##","##..##","######",".####."],
 "9":[".####.","######","##..##","##..##","######",".#####","....##","....##","######",".####."],
-"-":["......","......","......","......","######","######","......","......","......","......"]};
+"-":["......","......","......","......","######","######","......","......","......","......"],
+"+":["......","......","..##..","..##..","######","######","..##..","..##..","......","......"],
+">":["......","..#...","..##..","..###.","######","######","..###.","..##..","..#...","......"],
+"/":["....##","....##","...##.","...##.","..##..","..##..",".##...",".##...","##....","##...."]};
 // each glyph is baked once with its own outline, the way the reference draws them
 function bakeGlyph(rows,fill,edge){
   const gw=rows[0].length,gh=rows.length;
@@ -1849,7 +1860,7 @@ function makeFont(src,fill,edge,gap){
   const g={};for(const k in src)g[k]=bakeGlyph(src[k],fill,edge);
   return {g,gap};
 }
-const FONT_LABEL=makeFont(GL5,'#ffffff','#101c3f',1);
+const FONT_LABEL=makeFont(GL5,'#c3c6ff','#161c42',1);
 const FONT_VALUE=makeFont(GL10,'#ffffff','#080b32',2);
 const FONT_VALUE_HOT=makeFont(GL10,'#ffd23f','#080b32',2);
 function bmpWidth(str,F){
@@ -1864,29 +1875,44 @@ function bmpText(str,F,x,y,align){
     if(g){ctx.drawImage(g,cx-1,y-1);cx+=g.width-2+F.gap;}
     else cx+=3+F.gap;}
 }
-const HUDX=[39,108,170,232,290];   // column centres, measured off the reference
-const HUD_LY=10,HUD_VY=20;         // label row / value row, top edge
-// Remaining lives as hearts. Up to five slots are drawn; a 1UP run past that
-// collapses to one heart and a count so the row never overflows its column.
-function drawLives(cx,y){
-  if(G.lives>5){const n=String(G.lives),w=15+bmpWidth(n,FONT_VALUE),x0=Math.round(cx-w/2);
-    ctx.drawImage(HEART_ON,x0-1,y);bmpText(n,FONT_VALUE,x0+15,y,'left');return;}
-  const slots=Math.max(3,G.lives),w=slots*15-2;
-  for(let i=0;i<slots;i++)ctx.drawImage(i<G.lives?HEART_ON:HEART_OFF,Math.round(cx-w/2)+i*15,y);
+// Three columns, two rows each: LIFE over COIN on the left, WORLD in the middle,
+// TIME over SCORE on the right. The side columns sit flush against equal margins
+// and the block is centred in the 80px band, so the bar reads as one even shape.
+const HUD_M=24;                    // outer margin, the same on both sides
+const HUD_R1L=18,HUD_R1V=27;       // first row:  label top edge / value top edge
+const HUD_R2L=42,HUD_R2V=51;       // second row
+const HUD_MID=(HUD_R1L+HUD_R2V+12)/2;
+// Remaining lives, three heart slots laid out from a left edge.
+function drawLives(x,y){
+  for(let i=0;i<3;i++)ctx.drawImage(i<G.lives?HEART_ON:HEART_OFF,x+i*15,y);
+}
+// The coin counter doubles as the "50 coins buy a heart back" reminder:
+// the goal is spelled out, and the little heart says what the 50 is for.
+function drawCoins(x,y){
+  const n=pad(G.coins,2);
+  const F=(G.coins>=40&&(G.frame>>3)%2)?FONT_VALUE_HOT:FONT_VALUE;   // nearly there
+  ctx.drawImage(HCOIN,x,y);x+=12;
+  bmpText(n,F,x,y,'left');x+=bmpWidth(n,FONT_VALUE);
+  bmpText('/50',FONT_VALUE,x,y,'left');x+=bmpWidth('/50',FONT_VALUE);
+  ctx.drawImage(HEART_MINI,x+3,y+1);
 }
 function drawHUD(){
-  const X=HUDX;
-  ['NOBUO','LIFE','COIN','WORLD','TIME'].forEach((t,i)=>bmpText(t,FONT_LABEL,X[i],HUD_LY,'center'));
-  bmpText(pad(G.score,6),FONT_VALUE,X[0],HUD_VY,'center');
-  drawLives(X[1],HUD_VY);
-  ctx.drawImage(HCOIN,X[2]-15,HUD_VY);
-  bmpText(pad(G.coins,2),FONT_VALUE,X[2]+1,HUD_VY,'left');
-  bmpText((STAGES[G.world]||STAGES[0])[0],FONT_VALUE,X[3],HUD_VY,'center');
+  const LX=HUD_M, RX=W-HUD_M-bmpWidth('000000',FONT_VALUE), CX=W/2;
+  bmpText('LIFE',FONT_LABEL,LX,HUD_R1L,'left');
+  drawLives(LX,HUD_R1V-2);
+  bmpText('COIN',FONT_LABEL,LX,HUD_R2L,'left');
+  drawCoins(LX,HUD_R2V);
+  bmpText('WORLD',FONT_LABEL,CX,HUD_MID-10,'center');
+  bmpText((STAGES[G.world]||STAGES[0])[0],FONT_VALUE,CX,HUD_MID-1,'center');
+  bmpText('TIME',FONT_LABEL,RX,HUD_R1L,'left');
   if(G.state!=='card'&&G.state!=='gameover')
-    bmpText(pad(G.time,3),hurry&&(G.frame>>4)%2?FONT_VALUE_HOT:FONT_VALUE,X[4],HUD_VY,'center');
+    bmpText(pad(G.time,3),hurry&&(G.frame>>4)%2?FONT_VALUE_HOT:FONT_VALUE,RX,HUD_R1V,'left');
+  bmpText('SCORE',FONT_LABEL,RX,HUD_R2L,'left');
+  bmpText(pad(G.score,6),FONT_VALUE,RX,HUD_R2V,'left');
+  // the boss bar tucks into the empty strip below the middle column
   if(boss&&boss.phase!=='dead'&&G.state==='play'){const n=boss.maxhp,sw=Math.floor(72/n);
-    txt(boss.kind==='uber'?'ウーバーチャン':boss.kind==='karasu'?'オオガラス':'オオハト',148,36,'#ffd23f',8,'right');
-    R('#1b1726',152,37,n*sw+4,9);for(let i=0;i<n;i++)R(i<boss.hp?'#e0463a':'#4a3a4a',154+i*sw,39,sw-2,5);}
+    txt(boss.kind==='uber'?'ウーバーチャン':boss.kind==='karasu'?'オオガラス':'オオハト',148,68,'#ffd23f',8,'right');
+    R('#1b1726',152,69,n*sw+4,9);for(let i=0;i<n;i++)R(i<boss.hp?'#e0463a':'#4a3a4a',154+i*sw,71,sw-2,5);}
   if(G.muteT>0)txt(muted?'おと OFF':'おと ON',W-10,CH-16,'#ffffff',8,'right');
 }
 
@@ -1952,18 +1978,38 @@ function drawTitle(){
   ctx.drawImage(NOB.big.stand[0],G.selOn?24:40,208-32);
   const dx=W+20-((G.stateT*0.5)%(W+120));ctx.drawImage(DAR[(G.stateT>>3)%2],dx,208-16);
 }
+// the stage name is the headline of this card, so it is shrunk only when a long
+// one would not otherwise fit between the margins
+function fitSize(str,size,max){
+  let z=size;
+  while(z>9){ctx.font=`${z}px ${FONT}`;if(ctx.measureText(str).width<=max)break;z--;}
+  return z;
+}
 function drawCard(){
   R('#0b0914',0,0,W,H);
-  const st=STAGES[G.world]||STAGES[0];txt('WORLD '+st[0],W/2,84,'#ffffff',14,'center');
-  txt(st[1],W/2,106,'#ffd23f',10,'center');
-  ctx.drawImage(G.form===2?NOBF.small.stand[0]:NOB.small.stand[0],W/2-46,138);
-  drawLives(W/2+6,139);
-  if(G.world===2)txt('アイルの やねうらに オオハトが まっている…',W/2,178,'#e8787a',8,'center');
-  if(G.world===3)txt('ワールド2 スタート！',W/2,178,'#7fe08a',8,'center');
-  if(G.world===6)txt('にしあざぶの よるに オオガラスが まっている…',W/2,178,'#e8787a',8,'center');
-  if(G.world===7)txt('チャリのウーバーチャンが つっこんでくる！',W/2,178,'#e8787a',8,'center');
-  if(G.world===8)txt('ラッシュの まっただなかを かけぬけろ！',W/2,178,'#e8787a',8,'center');
-  if(G.world===9)txt('ほんぶの おくに ウーバーチャンが まつ…',W/2,178,'#e8787a',8,'center');
+  const st=STAGES[G.world]||STAGES[0];
+  const sp=G.form===2?NOBF.small.stand[0]:NOB.small.stand[0];
+  const he=HEART_ON,K2=2;                       // hero and hearts at double size
+  const rowH=Math.max(sp.height,he.height)*K2;
+  const ns=fitSize(st[1],17,272);
+  const bh=13+8+ns+26+rowH;
+  let y=Math.round(112-bh/2);
+  txt('WORLD '+st[0],W/2,y,'#c3c6ff',13,'center');y+=13+8;
+  txt(st[1],W/2,y,'#ffd23f',ns,'center');y+=ns+26;
+  // the hero and his hearts, centred together as one group
+  const hw=he.width*K2,step=hw+2*K2,hearts=step*3-2*K2,gap=14*K2;
+  const gw=sp.width*K2+gap+hearts,gx=Math.round(W/2-gw/2);
+  ctx.drawImage(sp,gx,y+Math.round((rowH-sp.height*K2)/2),sp.width*K2,sp.height*K2);
+  const hy=y+Math.round((rowH-he.height*K2)/2);
+  for(let i=0;i<3;i++)ctx.drawImage(i<G.lives?HEART_ON:HEART_OFF,
+    gx+sp.width*K2+gap+i*step,hy,hw,he.height*K2);
+  const warn={2:['アイルの やねうらに オオハトが まっている…','#e8787a'],
+              3:['ワールド2 スタート！','#7fe08a'],
+              5:['にしあざぶの よるに オオガラスが まっている…','#e8787a'],
+              6:['チャリのウーバーチャンが つっこんでくる！','#e8787a'],
+              7:['ラッシュの まっただなかを かけぬけろ！','#e8787a'],
+              8:['ほんぶの おくに ウーバーチャンが まつ…','#e8787a']}[G.world];
+  if(warn)txt(warn[0],W/2,y+rowH+26,warn[1],10,'center');
 }
 function drawGameOver(){R('#0b0914',0,0,W,H);txt('GAME OVER',W/2,88,'#ffffff',16,'center');
   const w=STAGES[WORLD_START[G.deathWorld]][0];
